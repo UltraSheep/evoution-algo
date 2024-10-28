@@ -1,4 +1,3 @@
-# cep_algorithm.py
 import numpy as np
 
 class algorithm:    

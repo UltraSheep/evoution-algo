@@ -1,4 +1,3 @@
-# fep_algorithm.py
 import numpy as np
 
 class algorithm:

@@ -1,10 +1,9 @@
-# compare_algorithms.py
 import numpy as np
 import matplotlib.pyplot as plt
 import importlib
 import os
 
-from benchmark_functions import sphere as current_function #Modify this to change benchmark function
+from benchmark_functions import sphere as current_function # Modify this to change benchmark function
 
 # Parameters
 DIM = 5
