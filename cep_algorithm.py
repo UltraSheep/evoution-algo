@@ -2,7 +2,7 @@
 import numpy as np
 
 class CEPAlgorithm:
-    def __init__(self, dim, pop_size=50, tournament_size=10):
+    def __init__(self, dim, pop_size, tournament_size):
         self.dim = dim
         self.pop_size = pop_size
         self.tournament_size = tournament_size
