@@ -1,15 +1,27 @@
 # compare_algorithms.py
 import numpy as np
 import matplotlib.pyplot as plt
-from benchmark_functions import sphere as current_function  # Replace with your desired benchmark function
-from cep_algorithm import CEPAlgorithm
-from fep_algorithm import FEPAlgorithm
+import importlib
+import os
+
+from benchmark_functions import sphere as current_function #Modify this to change benchmark function
 
 # Parameters
 DIM = 5
 GENERATIONS = 100
 POP_SIZE = 50
 TOURNAMENT_SIZE = 10
+
+def import_algorithms(folder):
+    algorithms = {}
+    for filename in os.listdir(folder):
+        if filename.endswith('.py') and filename != '__init__.py':
+            module_name = filename[:-3]
+            module = importlib.import_module(f'algorithms.{module_name}')
+            algorithms[module_name] = module
+    return algorithms
+
+algorithms = import_algorithms('evoution-algo/algorithms')
 
 def run_algorithm(algorithm_class, func):
     algorithm = algorithm_class(DIM, POP_SIZE, TOURNAMENT_SIZE)
@@ -30,21 +42,16 @@ def run_algorithm(algorithm_class, func):
         
     return best_fitness, best_fitness_history
 
-# Run CEP and FEP
-best_fit_cep, fitness_history_cep = run_algorithm(CEPAlgorithm, current_function)
-best_fit_fep, fitness_history_fep = run_algorithm(FEPAlgorithm, current_function)
+for algorithm_name, module in algorithms.items():
+    algorithm_class = module.algorithm
+    best_fit, fitness_history = run_algorithm(algorithm_class, current_function)
 
-# Plot results
-plt.figure(figsize=(10, 6))
-plt.plot(fitness_history_cep, label="CEP Algorithm")
-plt.plot(fitness_history_fep, label="FEP Algorithm")
+    plt.plot(fitness_history, label=f"{algorithm_name.capitalize()}")
+    print(f"{algorithm_name.capitalize()} - Best Fitness: {best_fit}")
+
 plt.xlabel("Generation")
 plt.ylabel("Best Fitness")
-plt.title("CEP vs FEP Algorithm Performance")
+plt.title("Algorithm Performance Comparison")
 plt.legend()
 plt.grid(True)
 plt.show()
-
-# Output best results
-print("CEP Algorithm - Best Fitness:", best_fit_cep)
-print("FEP Algorithm - Best Fitness:", best_fit_fep)

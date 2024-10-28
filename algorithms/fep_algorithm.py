@@ -1,7 +1,7 @@
-# cep_algorithm.py
+# fep_algorithm.py
 import numpy as np
 
-class CEPAlgorithm:
+class algorithm:
     def __init__(self, dim, pop_size, tournament_size):
         self.dim = dim
         self.pop_size = pop_size
@@ -15,7 +15,7 @@ class CEPAlgorithm:
         x, sigma = individual
         tau = 1 / np.sqrt(2 * np.sqrt(len(x)))
         sigma_prime = sigma * np.exp(tau * np.random.normal(0, 1, len(x)))
-        x_prime = x + sigma_prime * np.random.normal(0, 1, len(x))
+        x_prime = x + sigma_prime * np.random.standard_cauchy(len(x))
         return x_prime, sigma_prime
 
     def evaluate_population(self, population, func):
