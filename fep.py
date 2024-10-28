@@ -1,16 +1,15 @@
 import numpy as np
-from benchmark_functions import sphere  # Replace with desired benchmark function
+from benchmark_functions import sphere as target  # Replace with desired benchmark function
 
 # Parameters
 POP_SIZE = 50
 TOURNAMENT_SIZE = 10
 GENERATIONS = 100
+DIMENSIONS = 5
 
-# Initialize Population
 def initialize_population(dim, pop_size=POP_SIZE):
     return [(np.random.uniform(-5, 5, dim), np.random.uniform(0.1, 1.0, dim)) for _ in range(pop_size)]
 
-# Cauchy Mutation for FEP
 def cauchy_mutation(individual):
     x, sigma = individual
     tau = 1 / np.sqrt(2 * np.sqrt(len(x)))
@@ -18,11 +17,9 @@ def cauchy_mutation(individual):
     x_prime = x + sigma_prime * np.random.standard_cauchy(len(x))
     return x_prime, sigma_prime
 
-# Fitness Evaluation
 def evaluate_population(population, func):
     return [func(ind[0]) for ind in population]
 
-# Tournament Selection
 def tournament_selection(population, fitness, size=TOURNAMENT_SIZE, target_size=POP_SIZE):
     selected = []
     for _ in range(target_size):
@@ -30,7 +27,6 @@ def tournament_selection(population, fitness, size=TOURNAMENT_SIZE, target_size=
         selected.append(population[min(indices, key=lambda i: fitness[i])])
     return selected
 
-# FEP Algorithm
 def fep_algorithm(func, dim, generations=GENERATIONS):
     population = initialize_population(dim)
     best_solution, best_fitness = None, float('inf')
@@ -54,8 +50,7 @@ def fep_algorithm(func, dim, generations=GENERATIONS):
 
     return best_solution, best_fitness
 
-# Example test
 if __name__ == "__main__":
-    best_sol, best_fit = fep_algorithm(sphere, dim=5)
+    best_sol, best_fit = fep_algorithm(target, DIMENSIONS)
     print("\nBest Solution Found:", best_sol)
     print("Best Fitness Achieved:", best_fit)

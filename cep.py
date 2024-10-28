@@ -1,10 +1,11 @@
 import numpy as np
-from benchmark_functions import sphere  # Replace with desired function
+from benchmark_functions import sphere as target  # Replace with desired function
 
 # Parameters
 POP_SIZE = 50
 TOURNAMENT_SIZE = 10
 GENERATIONS = 100
+DIMENSIONS = 5
 
 def initialize_population(dim, pop_size=POP_SIZE):
     return [(np.random.uniform(-5, 5, dim), np.random.uniform(0.1, 1.0, dim)) for _ in range(pop_size)]
@@ -49,8 +50,7 @@ def cep_algorithm(func, dim, generations=GENERATIONS):
 
     return best_solution, best_fitness
 
-# Example test
 if __name__ == "__main__":
-    best_sol, best_fit = cep_algorithm(sphere, dim=5)
+    best_sol, best_fit = cep_algorithm(target, DIMENSIONS)
     print("\nBest Solution Found:", best_sol)
     print("Best Fitness Achieved:", best_fit)
