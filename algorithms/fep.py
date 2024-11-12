@@ -19,7 +19,7 @@ class algorithm:
         for generation in range(self.generations):
             offspring = [self.mutate(ind) for ind in population]
             combined_population = population + offspring
-            fitness_values = evaluate_population(combined_population, self.benchmark)
+            fitness_values = evaluate_population([self.strip_sigma(ind) for ind in combined_population], self.benchmark)
             population = self.tournament_selection(combined_population, fitness_values)
 
             generation_best = min(fitness_values)
@@ -28,6 +28,10 @@ class algorithm:
             best_fitness_history.append(best_fitness)
 
         return best_fitness, best_fitness_history
+    
+    def strip_sigma(self, element):
+        x,sigma = element
+        return x
 
     def mutate(self, individual):
         x, sigma = individual

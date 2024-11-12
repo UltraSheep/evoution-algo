@@ -27,3 +27,8 @@ class algorithm:
             best_fitness_history.append(best_fitness)
 
         return best_fitness, best_fitness_history
+    
+    # [self.strip_sigma(ind) for ind in population]
+    def strip_sigma(self, element):
+        x,sigma = element
+        return x

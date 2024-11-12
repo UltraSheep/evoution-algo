@@ -14,7 +14,7 @@ class algorithm:
         self.params = benchmark
 
     def train(self, initial_population):
-        population = initial_population
+        population = [self.strip_sigma(ind) for ind in initial_population]
         best_fitness_history = []
         best_fitness = float('inf')
         
@@ -26,6 +26,10 @@ class algorithm:
             
         # algorithm here
         #fitness_values = evaluate_population(population, self.benchmark)
+
+    def strip_sigma(self, element):
+        x,sigma = element
+        return x
 
     def elite_selection (self , pop , fitness):
         best_index = np.argmin(fitness)
