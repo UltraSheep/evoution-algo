@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import importlib
 import os
 
-from benchmark_functions import benchmark_sphere as benchmark # Modify this to change benchmark function
+from benchmark_functions import sphere as benchmark # Modify this to change benchmark function
 
 # Parameters
 DIM = 5
@@ -26,7 +26,7 @@ def initialize_population():
 algorithms = import_algorithms('./algorithms')
 
 for module in algorithms:
-    algorithm = module.algorithm(POP_SIZE, GENERATIONS, benchmark.function)
+    algorithm = module.algorithm(POP_SIZE, GENERATIONS, benchmark)
     best_fitness, best_fitness_history = algorithm.train(initialize_population())
     plt.plot(best_fitness_history, label=f"{algorithm.name.capitalize()}")
     print(f"{algorithm.name.capitalize()} - Best Fitness: {best_fitness}")

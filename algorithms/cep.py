@@ -8,7 +8,8 @@ class algorithm:
         self.name = "cep algorithm"
         self.pop_size = pop_size
         self.generations = generations
-        self.benchmark = benchmark
+        self.benchmark = benchmark.function
+        self.params=benchmark
 
     def train(self, initial_population):
         population = initial_population
