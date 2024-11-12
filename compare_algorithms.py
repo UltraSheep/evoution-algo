@@ -3,12 +3,13 @@ import matplotlib.pyplot as plt
 import importlib
 import os
 
-from benchmark_functions import sphere as benchmark # Modify this to change benchmark function
+from benchmark_functions import schwefel_2_22 as benchmark # Modify this to change benchmark function
 
 # Parameters
 DIM = 5
 GENERATIONS = 100
 POP_SIZE = 50
+RUNS = 10
 
 def import_algorithms(folder):
     algorithms = []
@@ -25,17 +26,29 @@ def initialize_population():
 
 algorithms = import_algorithms('./algorithms')
 
+initial_populations = []
+for run in range(RUNS) :
+    initial_populations.append(initialize_population())
+
 for module in algorithms:
-    algorithm = module.algorithm(POP_SIZE, GENERATIONS, benchmark)
-    best_fitness, best_fitness_history = algorithm.train(initialize_population())
-    plt.plot(best_fitness_history, label=f"{algorithm.name.capitalize()}")
-    print(f"{algorithm.name.capitalize()} - Best Fitness: {best_fitness}")
+    best_fitness_history_per_run = []
+    best_fitness_per_run = []
+
+    for run in range(RUNS) :
+        algorithm = module.algorithm(POP_SIZE, GENERATIONS, benchmark)
+        best_fitness, best_fitness_history = algorithm.train(initial_populations[run])
+
+        best_fitness_per_run.append(best_fitness)
+        best_fitness_history_per_run.append(best_fitness_history)
+
+    print(f"{algorithm.name.capitalize()} - Average Best Fitness: {np.average(best_fitness_per_run)}")
+    print(f"{algorithm.name.capitalize()} - Standard Deviation: {np.std(best_fitness_per_run)}")
+    plt.plot(np.mean(best_fitness_history_per_run, axis=0), label=f"{algorithm.name.capitalize()}")
     
 print(f"Best Theoretical Fitness: {benchmark.FMin}")
-
 plt.xlabel("Generation")
 plt.ylabel("Best Fitness")
-plt.title(f"Algorithm Performance Comparison\nBest Theoretical Fitness: {benchmark.FMin}")
+plt.title(f"Algorithm Average Performance Comparison\nBest Theoretical Fitness: {benchmark.FMin}")
 plt.legend()
 plt.grid(True)
 plt.show()
