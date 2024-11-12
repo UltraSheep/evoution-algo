@@ -23,9 +23,6 @@ def initialize_population():
     return [(np.random.uniform(benchmark.SMax, benchmark.SMin, DIM), np.random.uniform(0.1, 1.0, DIM)) 
                 for _ in range(POP_SIZE)]
 
-def evaluate_population(population, benchmark):
-    return [benchmark(ind[0]) for ind in population]
-
 algorithms = import_algorithms('./algorithms')
 
 for module in algorithms:
