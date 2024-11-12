@@ -11,3 +11,7 @@ Select a function from `benchmark_functions.py` and import it into `compare_algo
 Modify parameters in `compare_algorithms.py`.
 
 Run `compare_algorithms.py` to see results.
+
+---
+
+To write a new algorithm, take a look at `algorithms-excluded/template_algorithm.py` for example and instructions.

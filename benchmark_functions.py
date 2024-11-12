@@ -1,5 +1,17 @@
 import numpy as np
 
+class benchmark_function:
+    SMax = 100
+    SMin = -100
+    n = 30
+    FMin = 0
+    def function(x):
+        pass
+
+class benchmark_sphere(benchmark_function):
+    def function(x):
+        return np.sum(x**2)
+    
 def sphere(x):
     return np.sum(x**2)
 
