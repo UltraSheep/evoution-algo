@@ -6,10 +6,10 @@ import os
 from benchmark_functions import schwefel_2_22 as benchmark # Modify this to change benchmark function
 
 # Parameters
-DIM = 5
+DIM = 30
 GENERATIONS = 100
 POP_SIZE = 50
-RUNS = 10
+RUNS = 20
 
 def import_algorithms(folder):
     algorithms = []

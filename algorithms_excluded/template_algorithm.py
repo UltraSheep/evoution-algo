@@ -13,6 +13,8 @@ class algorithm:
         self.params=benchmark
 
     def train(self, initial_population):
+        # for algorithms that dont use sigma, replace with this:
+        # population = self.strip_sigma(initial_population)
         population = initial_population
         best_fitness_history = []
         best_fitness = float('inf')
@@ -20,7 +22,9 @@ class algorithm:
 
             # algorithm here
 
-            fitness_values = evaluate_population(population, self.benchmark)
+            # for algorithms that dont use sigma, replace with this:
+            # fitness_values = evaluate_population(population, self.benchmark)
+            fitness_values = evaluate_population(self.strip_sigma(population), self.benchmark)
             generation_best = min(fitness_values)
             if generation_best < best_fitness:
                 best_fitness = generation_best
@@ -28,7 +32,9 @@ class algorithm:
 
         return best_fitness, best_fitness_history
     
-    # [self.strip_sigma(ind) for ind in population]
-    def strip_sigma(self, element):
+    def strip_element_sigma(self, element):
         x,sigma = element
         return x
+    
+    def strip_sigma(self, population):
+        return [self.strip_element_sigma(ind) for ind in population]
