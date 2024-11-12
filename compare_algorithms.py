@@ -20,33 +20,13 @@ def import_algorithms(folder):
             algorithms[module_name] = module
     return algorithms
 
-algorithms = import_algorithms('evoution-algo/algorithms')
-
-def run_algorithm(algorithm_class, func):
-    algorithm = algorithm_class(DIM, POP_SIZE, TOURNAMENT_SIZE)
-    population = algorithm.initialize_population()
-    best_fitness_history = []
-    best_fitness = float('inf')
-    
-    for generation in range(GENERATIONS):
-        offspring = [algorithm.mutate(ind) for ind in population]
-        combined_population = population + offspring
-        fitness_values = algorithm.evaluate_population(combined_population, func)
-        population = algorithm.tournament_selection(combined_population, fitness_values)
-        
-        generation_best = min(fitness_values)
-        if generation_best < best_fitness:
-            best_fitness = generation_best
-        best_fitness_history.append(best_fitness)
-        
-    return best_fitness, best_fitness_history
+algorithms = import_algorithms('./algorithms')
 
 for algorithm_name, module in algorithms.items():
-    algorithm_class = module.algorithm
-    best_fit, fitness_history = run_algorithm(algorithm_class, current_function)
-
-    plt.plot(fitness_history, label=f"{algorithm_name.capitalize()}")
-    print(f"{algorithm_name.capitalize()} - Best Fitness: {best_fit}")
+    algorithm = module.algorithm(DIM, POP_SIZE, TOURNAMENT_SIZE, GENERATIONS)
+    best_fitness, best_fitness_history = algorithm.train(current_function)
+    plt.plot(best_fitness_history, label=f"{algorithm_name.capitalize()}")
+    print(f"{algorithm_name.capitalize()} - Best Fitness: {best_fitness}")
 
 plt.xlabel("Generation")
 plt.ylabel("Best Fitness")

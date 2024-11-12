@@ -1,10 +1,29 @@
 import numpy as np
 
 class algorithm:
-    def __init__(self, dim, pop_size, tournament_size):
+    def __init__(self, dim, pop_size, tournament_size, generations):
         self.dim = dim
         self.pop_size = pop_size
         self.tournament_size = tournament_size
+        self.generations = generations
+
+    def train(self, func):
+        population = self.initialize_population()
+        best_fitness_history = []
+        best_fitness = float('inf')
+
+        for generation in range(self.generations):
+            offspring = [self.mutate(ind) for ind in population]
+            combined_population = population + offspring
+            fitness_values = self.evaluate_population(combined_population, func)
+            population = self.tournament_selection(combined_population, fitness_values)
+
+            generation_best = min(fitness_values)
+            if generation_best < best_fitness:
+                best_fitness = generation_best
+            best_fitness_history.append(best_fitness)
+            
+        return best_fitness, best_fitness_history
 
     def initialize_population(self):
         return [(np.random.uniform(-5, 5, self.dim), np.random.uniform(0.1, 1.0, self.dim)) 
