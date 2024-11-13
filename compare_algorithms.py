@@ -10,6 +10,7 @@ DIM = 30
 GENERATIONS = 100
 POP_SIZE = 50
 RUNS = 20
+#test
 
 def import_algorithms(folder):
     algorithms = []
