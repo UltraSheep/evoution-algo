@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import importlib
 import os
 
-from benchmark_functions import schwefel_2_22 as benchmark # Modify this to change benchmark function
+from benchmark_functions import rosenbrock as benchmark # Modify this to change benchmark function
 
 # Parameters
 DIM = 30

@@ -1,2 +1,2 @@
 def evaluate_population(population, benchmark):
-    return [benchmark(ind[0]) for ind in population]
+    return [benchmark(ind) for ind in population]
