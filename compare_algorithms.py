@@ -73,7 +73,7 @@ for name, result in results.items():
 Path("./results").mkdir(exist_ok=True)
 with open(f"./results/{config.RESULTS_FILE}_{datetime.datetime.now().strftime('%Y_%m_%d_%H%M%S')}.txt", "w") as file:
     file.write("Benchmark function = "+ config.BENCHMARK.__name__)
-    file.write(f"\nDimension = {config.DIM}\nGenerations = {config.GENERATIONS}\nPopulation size = {config.DIM}\nRuns = {config.RUNS}\nSeed = {config.SEED}\nTournament size = {config.TOURNAMENT_SIZE}")
+    file.write(f"\nDimension = {config.DIM}\nGenerations = {config.GENERATIONS}\nPopulation size = {config.DIM}\nRuns = {config.RUNS}\nSeed = {config.SEED}\nTournament size = {config.TOURNAMENT_SIZE}\n")
     file.write("\n".join(summary))
     file.write(f"Best Theoretical Fitness: {config.BENCHMARK.FMin}")
 
