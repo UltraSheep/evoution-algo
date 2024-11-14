@@ -22,7 +22,7 @@ class algorithm:
             combined_population = population + offspring
             fitness_values = evaluate_population(self.strip_sigma(combined_population), self.benchmark)
             population = self.tournament_selection(combined_population, fitness_values)
-
+            
             generation_best = min(fitness_values)
             if generation_best < best_fitness:
                 best_fitness = generation_best
@@ -39,15 +39,25 @@ class algorithm:
 
     def mutate(self, individual):
         x, sigma = individual
+
+        # Calculate the tau parameter for scaling the mutation
         tau = 1 / np.sqrt(2 * np.sqrt(len(x)))
+
+        # Mutate the step size (sigma) by applying a random factor to it
         sigma_prime = sigma * np.exp(tau * self.rs.normal(0, 1, len(x)))
+
+        # Mutate the position (x) based on the new step size
         x_prime = x + sigma_prime * self.rs.standard_cauchy(len(x))
+
         return x_prime, sigma_prime
 
     def tournament_selection(self, population, fitness):
         selected = []
         for _ in range(self.pop_size):
+            # Randomly select 'tournament_size' individuals from the population
             indices = self.rs.choice(len(population), min(self.tournament_size, len(population)), replace=False)
-            selected.append(population[min(indices, key=lambda i: fitness[i])])
-        return selected
 
+            # Add the best individual from the tournament to the selected list
+            selected.append(population[min(indices, key=lambda i: fitness[i])])
+
+        return selected
