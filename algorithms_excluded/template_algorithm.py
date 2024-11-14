@@ -11,6 +11,7 @@ class algorithm:
         self.generations = config.GENERATIONS
         self.benchmark = config.BENCHMARK.function
         self.params= config.BENCHMARK
+        self.rs = np.random.RandomState(config.SEED)
 
     def train(self, initial_population):
         # for algorithms that dont use sigma, replace with this:
@@ -20,8 +21,8 @@ class algorithm:
         best_fitness = float('inf')
         for _ in range(self.generations):
 
-            # algorithm here, remember to set random seed
-            # np.random.seed(config.SEED)
+            # algorithm here
+            # use self.rs instead of np.random
 
             # for algorithms that dont use sigma, replace with this:
             # fitness_values = evaluate_population(population, self.benchmark)

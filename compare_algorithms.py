@@ -23,10 +23,9 @@ def import_algorithms(folder):
 
 # Initializes a population
 def initialize_population():
-    #np.random.seed(config.SEED)
     return [
-        (np.random.uniform(config.BENCHMARK.SMin, config.BENCHMARK.SMax, config.DIM), 
-            np.random.uniform(0.1, 1.0, config.DIM))
+        (rs.uniform(config.BENCHMARK.SMin, config.BENCHMARK.SMax, config.DIM), 
+            rs.uniform(0.1, 1.0, config.DIM))
         for _ in range(config.POP_SIZE)
     ]
 
@@ -47,6 +46,7 @@ def run_algorithm(algorithm, initial_population, results):
     }
 
 # Start
+rs = np.random.RandomState(config.SEED)
 algorithms = import_algorithms("./algorithms")
 initial_populations = [initialize_population() for _ in range(config.RUNS)]
 

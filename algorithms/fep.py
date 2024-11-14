@@ -11,6 +11,7 @@ class algorithm:
         self.generations = config.GENERATIONS
         self.benchmark = config.BENCHMARK.function
         self.params= config.BENCHMARK
+        self.rs = np.random.RandomState(config.SEED)
 
     def train(self, initial_population):
         population = initial_population
@@ -38,18 +39,16 @@ class algorithm:
         return [self.strip_element_sigma(ind) for ind in population]
 
     def mutate(self, individual):
-        #np.random.seed(config.SEED)
         x, sigma = individual
         tau = 1 / np.sqrt(2 * np.sqrt(len(x)))
-        sigma_prime = sigma * np.exp(tau * np.random.normal(0, 1, len(x)))
-        x_prime = x + sigma_prime * np.random.standard_cauchy(len(x))
+        sigma_prime = sigma * np.exp(tau * self.rs.normal(0, 1, len(x)))
+        x_prime = x + sigma_prime * self.rs.standard_cauchy(len(x))
         return x_prime, sigma_prime
 
     def tournament_selection(self, population, fitness):
-        #np.random.seed(config.SEED)
         selected = []
         for _ in range(self.pop_size):
-            indices = np.random.choice(len(population), min(tournament_size, len(population)), replace=False)
+            indices = self.rs.choice(len(population), min(tournament_size, len(population)), replace=False)
             selected.append(population[min(indices, key=lambda i: fitness[i])])
         return selected
 
