@@ -23,7 +23,7 @@ class algorithm:
         for _ in range(self.generations):
 
             # algorithm here
-            # use self.rs instead of np.random
+            # use self.rs instead of np.random for repetable random numbers
 
             # for algorithms that dont use sigma, replace with this:
             # fitness_values = evaluate_population(population, self.benchmark)
