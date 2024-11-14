@@ -11,6 +11,7 @@ class algorithm:
         self.generations = config.GENERATIONS
         self.benchmark = config.BENCHMARK.function
         self.params= config.BENCHMARK
+        self.tournament_size = config.TOURNAMENT_SIZE
         self.rs = np.random.RandomState(config.SEED)
 
     def train(self, initial_population):

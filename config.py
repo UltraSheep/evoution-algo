@@ -5,6 +5,7 @@ GENERATIONS = 100
 POP_SIZE = 50
 RUNS = 20
 SEED = 123
+TOURNAMENT_SIZE = 10
 RESULTS_FILE = "results_summary.txt"
 
 # available benchmark functions:

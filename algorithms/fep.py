@@ -2,8 +2,6 @@ import numpy as np
 import config
 from utils.evaluate_population import evaluate_population
 
-tournament_size = 10
-
 class algorithm:    
     def __init__(self):
         self.name = "fep algorithm"
@@ -11,6 +9,7 @@ class algorithm:
         self.generations = config.GENERATIONS
         self.benchmark = config.BENCHMARK.function
         self.params= config.BENCHMARK
+        self.tournament_size = config.TOURNAMENT_SIZE
         self.rs = np.random.RandomState(config.SEED)
 
     def train(self, initial_population):
@@ -48,7 +47,7 @@ class algorithm:
     def tournament_selection(self, population, fitness):
         selected = []
         for _ in range(self.pop_size):
-            indices = self.rs.choice(len(population), min(tournament_size, len(population)), replace=False)
+            indices = self.rs.choice(len(population), min(self.tournament_size, len(population)), replace=False)
             selected.append(population[min(indices, key=lambda i: fitness[i])])
         return selected
 

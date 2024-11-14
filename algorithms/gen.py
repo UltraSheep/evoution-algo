@@ -13,6 +13,7 @@ class algorithm:
         self.pop_size = config.POP_SIZE
         self.generations = config.GENERATIONS
         self.benchmark = config.BENCHMARK.function
+        self.tournament_size = config.TOURNAMENT_SIZE
         self.params= config.BENCHMARK
 
     def train(self, initial_population):
