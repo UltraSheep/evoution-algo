@@ -1,22 +1,23 @@
 import numpy as np
-from evaluate_population import evaluate_population
+import config
+from utils.evaluate_population import evaluate_population
 
 tournament_size = 10
 
 class algorithm:    
-    def __init__(self, pop_size, generations, benchmark):
+    def __init__(self):
         self.name = "cep algorithm"
-        self.pop_size = pop_size
-        self.generations = generations
-        self.benchmark = benchmark.function
-        self.params=benchmark
+        self.pop_size = config.POP_SIZE
+        self.generations = config.GENERATIONS
+        self.benchmark = config.BENCHMARK.function
+        self.params= config.BENCHMARK
 
     def train(self, initial_population):
         population = initial_population
         best_fitness_history = []
         best_fitness = float('inf')
 
-        for generation in range(self.generations):
+        for _ in range(self.generations):
             offspring = [self.mutate(ind) for ind in population]
             combined_population = population + offspring
             fitness_values = evaluate_population(self.strip_sigma(combined_population), self.benchmark)
@@ -30,13 +31,14 @@ class algorithm:
         return best_fitness, best_fitness_history
 
     def strip_element_sigma(self, element):
-        x,sigma = element
+        x, _ = element
         return x
     
     def strip_sigma(self, population):
         return [self.strip_element_sigma(ind) for ind in population]
 
     def mutate(self, individual):
+        #np.random.seed(config.SEED)
         x, sigma = individual
         tau = 1 / np.sqrt(2 * np.sqrt(len(x)))
         sigma_prime = sigma * np.exp(tau * np.random.normal(0, 1, len(x)))
@@ -44,6 +46,7 @@ class algorithm:
         return x_prime, sigma_prime
 
     def tournament_selection(self, population, fitness):
+        #np.random.seed(config.SEED)
         selected = []
         for _ in range(self.pop_size):
             indices = np.random.choice(len(population), min(tournament_size, len(population)), replace=False)

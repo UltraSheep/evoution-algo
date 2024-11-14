@@ -1,24 +1,26 @@
 import numpy as np
+import config
+
 import random
-from evaluate_population import evaluate_population
+from utils.evaluate_population import evaluate_population
 
 c_rate = 0.70
 m_rate = 0.01
 
 class algorithm:    
-    def __init__(self, pop_size , generations , benchmark):
+    def __init__(self):
         self.name = "gen algorithm"
-        self.pop_size = pop_size
-        self.generations = generations
-        self.benchmark = benchmark.function
-        self.params = benchmark
+        self.pop_size = config.POP_SIZE
+        self.generations = config.GENERATIONS
+        self.benchmark = config.BENCHMARK.function
+        self.params= config.BENCHMARK
 
     def train(self, initial_population):
         population = self.strip_sigma(initial_population)
         best_fitness_history = []
         best_fitness = float('inf')
         
-        for generation in range(self.generations):
+        for _ in range(self.generations):
             population , best_fitness = self.evolve (population)
             best_fitness_history.append (best_fitness)
 
@@ -28,7 +30,7 @@ class algorithm:
         #fitness_values = evaluate_population(population, self.benchmark)
 
     def strip_element_sigma(self, element):
-        x,sigma = element
+        x, _ = element
         return x
     
     def strip_sigma(self, population):
