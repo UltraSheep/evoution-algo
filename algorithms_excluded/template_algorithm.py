@@ -1,16 +1,18 @@
 import numpy as np
-from evaluate_population import evaluate_population
+import config
+from utils.evaluate_population import evaluate_population
 
 # other parameters
 
 class algorithm:    
-    def __init__(self, pop_size, tournament_size, generations, benchmark):
+    def __init__(self):
         self.name = "example algorithm"
-        self.pop_size = pop_size
-        self.tournament_size = tournament_size
-        self.generations = generations
-        self.benchmark = benchmark.function
-        self.params=benchmark
+        self.pop_size = config.POP_SIZE
+        self.generations = config.GENERATIONS
+        self.benchmark = config.BENCHMARK.function
+        self.params= config.BENCHMARK
+        self.tournament_size = config.TOURNAMENT_SIZE
+        self.rs = np.random.RandomState(config.SEED)
 
     def train(self, initial_population):
         # for algorithms that dont use sigma, replace with this:
@@ -18,9 +20,10 @@ class algorithm:
         population = initial_population
         best_fitness_history = []
         best_fitness = float('inf')
-        for generation in range(self.generations):
+        for _ in range(self.generations):
 
             # algorithm here
+            # use self.rs instead of np.random
 
             # for algorithms that dont use sigma, replace with this:
             # fitness_values = evaluate_population(population, self.benchmark)
@@ -33,7 +36,7 @@ class algorithm:
         return best_fitness, best_fitness_history
     
     def strip_element_sigma(self, element):
-        x,sigma = element
+        x, _ = element
         return x
     
     def strip_sigma(self, population):
