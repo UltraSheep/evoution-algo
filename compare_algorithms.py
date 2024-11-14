@@ -2,8 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import importlib
 import os
+import datetime
 import threading
 import config
+
+from pathlib import Path
 
 # Imports algorithm modules from the specified folder.
 def import_algorithms(folder):
@@ -67,16 +70,19 @@ for name, result in results.items():
     summary.append(output)
     plt.plot(result["fitness_history"], label=f"{name.capitalize()}")
 
-with open(config.RESULTS_FILE, "w") as file:
+Path("./results").mkdir(exist_ok=True)
+with open(f"./results/{config.RESULTS_FILE}_{datetime.datetime.now().strftime('%Y_%m_%d_%H%M%S')}.txt", "w") as file:
     file.write("Benchmark function = "+ config.BENCHMARK.__name__)
-    file.write(f"\nDimension = {config.DIM}\nGenerations = {config.GENERATIONS}\nPopulation size = {config.DIM}\nRuns = {config.RUNS}\nSeed = {config.SEED}\n")
+    file.write(f"\nDimension = {config.DIM}\nGenerations = {config.GENERATIONS}\nPopulation size = {config.DIM}\nRuns = {config.RUNS}\nSeed = {config.SEED}\nTournament size = {config.TOURNAMENT_SIZE}")
     file.write("\n".join(summary))
     file.write(f"Best Theoretical Fitness: {config.BENCHMARK.FMin}")
 
 print(f"Best Theoretical Fitness: {config.BENCHMARK.FMin}")
-plt.xlabel("Generation")
-plt.ylabel("Best Fitness")
-plt.title(f"Algorithm Average Performance Comparison\nBest Theoretical Fitness: {config.BENCHMARK.FMin}")
-plt.legend()
-plt.grid(True)
-plt.show()
+
+if config.PLOT:
+    plt.xlabel("Generation")
+    plt.ylabel("Best Fitness")
+    plt.title(f"Algorithm Average Performance Comparison\nBest Theoretical Fitness: {config.BENCHMARK.FMin}")
+    plt.legend()
+    plt.grid(True)
+    plt.show()

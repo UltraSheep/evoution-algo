@@ -1,9 +1,0 @@
-Benchmark function = Sphere
-Dimension = 30
-Generations = 100
-Population size = 30
-Runs = 20
-Seed = 123
-Gen algorithm - Avg Best Fitness: 7026.42596164454, Std Dev: 2407.0886692269787
-Cep algorithm - Avg Best Fitness: 20033.267368768902, Std Dev: 6466.899409703416
-Fep algorithm - Avg Best Fitness: 3114.7186733396497, Std Dev: 2000.24972783141Best Theoretical Fitness: 0

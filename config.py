@@ -6,7 +6,8 @@ POP_SIZE = 50
 RUNS = 20
 SEED = 123
 TOURNAMENT_SIZE = 10
-RESULTS_FILE = "results_summary.txt"
+RESULTS_FILE = "test"
+PLOT = False
 
 # available benchmark functions:
 # Sphere
