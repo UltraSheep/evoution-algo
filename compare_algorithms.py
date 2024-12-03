@@ -5,6 +5,7 @@ import os
 import datetime
 import threading
 import config
+from nicegui import ui
 
 from pathlib import Path
 
@@ -25,7 +26,7 @@ def import_algorithms(folder):
     return algorithms
 
 # Initializes a population
-def initialize_population():
+def initialize_population(rs):
     return [
         (rs.uniform(config.BENCHMARK.SMin, config.BENCHMARK.SMax, config.DIM), 
             rs.uniform(0.1, 1.0, config.DIM))
@@ -49,40 +50,42 @@ def run_algorithm(algorithm, initial_population, results):
     }
 
 # Start
-rs = np.random.RandomState(config.SEED)
-algorithms = import_algorithms("./algorithms")
-initial_populations = [initialize_population() for _ in range(config.RUNS)]
+def start():
+    rs = np.random.RandomState(config.SEED)
+    algorithms = import_algorithms("./algorithms")
+    initial_populations = [initialize_population(rs) for _ in range(config.RUNS)]
 
-threads = []
-results = {}
-for module in algorithms:
-    thread = threading.Thread(target=run_algorithm, args=(module, initial_populations, results))
-    threads.append(thread)
-    thread.start()
+    threads = []
+    results = {}
+    for module in algorithms:
+        thread = threading.Thread(target=run_algorithm, args=(module, initial_populations, results))
+        threads.append(thread)
+        thread.start()
 
-for thread in threads:
-    thread.join()
+    for thread in threads:
+        thread.join()
 
-summary = []
-for name, result in results.items():
-    output = f"{name.capitalize()} - Avg Best Fitness: {result['average_best_fitness']}, Std Dev: {result['std_dev']}"
-    print(output)
-    summary.append(output)
-    plt.plot(result["fitness_history"], label=f"{name.capitalize()}")
+    summary = []
+    for name, result in results.items():
+        output = f"{name.capitalize()} - Avg Best Fitness: {result['average_best_fitness']}, Std Dev: {result['std_dev']}"
+        print(output)
+        summary.append(output)
+        plt.plot(result["fitness_history"], label=f"{name.capitalize()}")
 
-Path("./results").mkdir(exist_ok=True)
-with open(f"./results/{config.RESULTS_FILE}_{datetime.datetime.now().strftime('%Y_%m_%d_%H%M%S')}.txt", "w") as file:
-    file.write("Benchmark function = "+ config.BENCHMARK.__name__)
-    file.write(f"\nDimension = {config.DIM}\nGenerations = {config.GENERATIONS}\nPopulation size = {config.POP_SIZE}\nRuns = {config.RUNS}\nSeed = {config.SEED}\nTournament size = {config.TOURNAMENT_SIZE}\n")
-    file.write("\n".join(summary))
-    file.write(f"\nBest Theoretical Fitness: {config.BENCHMARK.FMin}")
+    Path("./results").mkdir(exist_ok=True)
+    with open(f"./results/{config.RESULTS_FILE}_{datetime.datetime.now().strftime('%Y_%m_%d_%H%M%S')}.txt", "w") as file:
+        file.write("Benchmark function = "+ config.BENCHMARK.__name__)
+        file.write(f"\nDimension = {config.DIM}\nGenerations = {config.GENERATIONS}\nPopulation size = {config.POP_SIZE}\nRuns = {config.RUNS}\nSeed = {config.SEED}\nTournament size = {config.TOURNAMENT_SIZE}\n")
+        file.write("\n".join(summary))
+        file.write(f"\nBest Theoretical Fitness: {config.BENCHMARK.FMin}")
 
-print(f"Best Theoretical Fitness: {config.BENCHMARK.FMin}")
+    print(f"Best Theoretical Fitness: {config.BENCHMARK.FMin}")
 
-if config.PLOT:
-    plt.xlabel("Generation")
-    plt.ylabel("Best Fitness")
-    plt.title(f"Algorithm Average Performance Comparison\nBest Theoretical Fitness: {config.BENCHMARK.FMin}")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+    if config.PLOT:
+        plt.xlabel("Generation")
+        plt.ylabel("Best Fitness")
+        plt.title(f"Algorithm Average Performance Comparison\nBest Theoretical Fitness: {config.BENCHMARK.FMin}")
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+    return file.name
