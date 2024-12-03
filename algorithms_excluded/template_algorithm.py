@@ -1,6 +1,6 @@
 import numpy as np
-import config
-from utils.evaluate_population import evaluate_population
+from .. import config
+from ..utils.evaluate_population import evaluate_population
 
 # other parameters
 

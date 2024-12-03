@@ -1,7 +1,6 @@
 import numpy as np
-import config
-
-from utils.evaluate_population import evaluate_population
+from .. import config
+from ..utils.evaluate_population import evaluate_population
 
 c_rate = 0.80
 m_rate = 0.20

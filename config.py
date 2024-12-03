@@ -1,4 +1,4 @@
-from utils.benchmark_functions import Sphere as benchmark  # change import to any function listed below
+from .utils.benchmark_functions import Sphere as benchmark  # change import to any function listed below
 BENCHMARK = benchmark
 DIM = 30
 GENERATIONS = 100
