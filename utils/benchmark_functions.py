@@ -1,17 +1,6 @@
 import numpy as np
 import config
 
-class BenchmarkFunctionBase:
-    SMax = 100
-    SMin = -100
-    n = 30
-    FMin = 0
-
-    @staticmethod
-    def function(x):
-        raise NotImplementedError("Function not implemented in base class.")
-
-
 class Sphere(BenchmarkFunctionBase):
     @staticmethod
     def function(x):
