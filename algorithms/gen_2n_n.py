@@ -137,7 +137,7 @@ class algorithm:
             offspring.append (self.mutate(child1))
             offspring.append (self.mutate(child2))
 
-        combined_population = pop + offspring
+        combined_population = parents + offspring
         combined_fitness = evaluate_population (combined_population , self.benchmark)
         sorted_indices = np.argsort (combined_fitness)
         new_population = [combined_population[i] for i in sorted_indices[:self.pop_size]]
