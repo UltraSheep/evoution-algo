@@ -1,4 +1,5 @@
 from .utils.benchmark_functions import Sphere as benchmark  # change import to any function listed below
+from .algorithms.gen_2n_n import algorithm
 BENCHMARK = benchmark
 DIM = 30
 GENERATIONS = 100
