@@ -10,7 +10,6 @@ class BenchmarkFunctionBase:
     def function(x):
         raise NotImplementedError("Function not implemented in base class.")
 
-
 class Sphere(BenchmarkFunctionBase):
     @staticmethod
     def function(x):

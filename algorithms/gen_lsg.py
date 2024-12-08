@@ -100,50 +100,6 @@ class algorithm:
                 individual[i] += self.rs.uniform (-1 , 1) * (self.params.SMax - self.params.SMin) * 0.1
                 individual[i] = np.clip (individual[i] , self.params.SMin , self.params.SMax)
         return individual
-    
-    def evolve_elite (self , pop):
-        fitness = evaluate_population(pop , self.benchmark)
-        best_individuals , best_fitness = self.elite_selection (pop , fitness)
-
-        new_population = best_individuals
-        parents = self.tournament_selection (self.pop_size - 1 , pop , fitness)
-        
-        # Random selection 10% of the population
-        # random_count = max(1, int(self.pop_size * 0.1))
-        # random_indices = self.rs.choice(range(len(pop)) , random_count , replace=False)
-        # random_individuals = [pop[i] for i in random_indices]
-        # new_population = best_individuals + random_individuals
-        # parents = self.tournament_selection(self.pop_size - len(new_population) , pop , fitness)
-
-        for i in range (0 , len (parents) , 2):
-            parent1 , parent2 = parents[i] , parents[min (i + 1 , len (parents) - 1)]
-            child1 , child2 = self.simulated_binary_crossover (parent1 , parent2)
-            new_population.append (self.mutate (child1))
-            if len (new_population) < self.pop_size:
-                new_population.append (self.mutate (child2))
-
-        return new_population, best_fitness
-
-    def evolve_c_2n_n (self , pop):
-        fitness = evaluate_population(pop , self.benchmark)
-        parents = self.tournament_selection (self.pop_size , pop , fitness)
-        offspring = []
-        for i in range (0, len(pop), 2):
-            # parent1 , parent2 = pop[i] , pop[i + 1]
-            # parent1 = pop[i]
-            # parent2 = pop[min(i + 1, len(pop) - 1)]
-            parent1 , parent2 = parents[i] , parents[min (i + 1 , len (parents) - 1)]
-            child1 , child2 = self.simulated_binary_crossover (parent1 , parent2)
-            offspring.append (self.mutate(child1))
-            offspring.append (self.mutate(child2))
-
-        combined_population = pop + offspring
-        combined_fitness = evaluate_population (combined_population , self.benchmark)
-        sorted_indices = np.argsort (combined_fitness)
-        new_population = [combined_population[i] for i in sorted_indices[:self.pop_size]]
-        best_fitness = combined_fitness[sorted_indices[0]]
-
-        return new_population , best_fitness
 
     def evolve_lsgop (self , pop):
             # tournament selection with size 5% of population
