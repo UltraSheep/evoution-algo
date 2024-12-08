@@ -1,3 +1,11 @@
+Install requirements first
+
+`pip install -r requirements.txt`
+
+run with
+
+`fastapi run`
+
 # evoution-algo
 
 Automated testing for evolution algorithms.
