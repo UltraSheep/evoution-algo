@@ -6,6 +6,8 @@ from utils.evaluate_population import evaluate_population
 c_rate = 0.80
 m_rate = 0.20
 
+fitness = None  # Declare fitness as a global variable
+
 class algorithm:    
     def __init__(self):
         self.name = "gen_2n_n algorithm"
@@ -13,11 +15,15 @@ class algorithm:
         self.generations = config.GENERATIONS
         self.benchmark = config.BENCHMARK.function
         self.tournament_size = config.TOURNAMENT_SIZE
-        self.params= config.BENCHMARK
+        self.params = config.BENCHMARK
         self.rs = np.random.RandomState(config.SEED)
 
     def train(self, initial_population):
+        global fitness
+        
         population = self.strip_sigma(initial_population)
+        fitness = evaluate_population(population, self.benchmark)  # First fitness evaluation
+
         best_fitness_history = []
         best_fitness = float('inf')
         
@@ -27,61 +33,39 @@ class algorithm:
             global m_rate
             m_rate = 0.2 * (1 - generation / self.generations) + 0.01 * (generation / self.generations)
 
-            population , best_fitness = self.evolve_c_2n_n (population)
+            population, best_fitness = self.evolve_c_2n_n(population)
 
-            # 5 generations without improvement
-            # 還沒用
-            # best_fitness_streak = 0
-            # previous_best_fitness = float('inf')
-            # if abs(best_fitness - previous_best_fitness) < 1e-6:
-            #     best_fitness_streak = best_fitness_streak + 1
-            # else:
-            #     best_fitness_streak = 0
-            # previous_best_fitness = best_fitness
+            best_fitness_history.append(best_fitness)
 
-            # if best_fitness_streak >= 5:
-            #     m_rate = min(m_rate * 1.5 , 0.5)
-            #     c_rate = 0.9
+        return best_fitness, best_fitness_history
 
-            best_fitness_history.append (best_fitness)
-
-        return best_fitness , best_fitness_history
-            
     def strip_element_sigma(self, element):
         x, _ = element
         return x
     
     def strip_sigma(self, population):
-        return [self.strip_element_sigma (ind) for ind in population]
+        return [self.strip_element_sigma(ind) for ind in population]
 
-    def elite_selection (self , pop , fitness):
-        elite_count = max(1 , int(self.pop_size * 0.1))
+    def elite_selection(self, pop, fitness):
+        elite_count = max(1, int(self.pop_size * 0.1))
         sorted_indices = np.argsort(fitness)
         elite_individuals = [pop[i] for i in sorted_indices[:elite_count]]
         elite_fitness = [fitness[i] for i in sorted_indices[:elite_count]]
         return elite_individuals, elite_fitness[0]
 
-    def tournament_selection (self , n , pop , fitness):
+    def tournament_selection(self, n, pop, fitness):
         selected = []
-        for i in range (n):
-            # 2 pick 1
-            # idx1 , idx2 = self.rs.choice (range(len(pop)), 2, replace = False)
-            # if fitness[idx1] < fitness[idx2]:
-            #     selected.append(pop[idx1])
-            # else:
-            #     selected.append(pop[idx2])
-
-            # tournament_size pick 1
-            candidates = self.rs.choice(range(len(pop)) , self.tournament_size , replace = False)
-            best_idx = min (candidates , key = lambda idx: fitness[idx])
+        for i in range(n):
+            candidates = self.rs.choice(range(len(pop)), self.tournament_size, replace=False)
+            best_idx = min(candidates, key=lambda idx: fitness[idx])
             selected.append(pop[best_idx])
         return selected
 
-    def simulated_binary_crossover (self , parent1 , parent2 , eta = 0.5):
-        child1 , child2 = np.copy(parent1) , np.copy(parent2)
-        for i in range (len (parent1)):
-            if self.rs.uniform(0 , 1) <= c_rate:
-                u = self.rs.uniform(0 , 1)
+    def simulated_binary_crossover(self, parent1, parent2, eta=0.5):
+        child1, child2 = np.copy(parent1), np.copy(parent2)
+        for i in range(len(parent1)):
+            if self.rs.uniform(0, 1) <= c_rate:
+                u = self.rs.uniform(0, 1)
                 if u <= 0.5:
                     beta = (2 * u) ** (1 / (eta + 1))
                 else:
@@ -90,35 +74,38 @@ class algorithm:
                 child1[i] = 0.5 * ((1 + beta) * parent1[i] + (1 - beta) * parent2[i])
                 child2[i] = 0.5 * ((1 - beta) * parent1[i] + (1 + beta) * parent2[i])
         
-            child1[i] = np.clip(child1[i], self.params.SMin , self.params.SMax)
-            child2[i] = np.clip(child2[i], self.params.SMin , self.params.SMax)
-        return child1 , child2
+            child1[i] = np.clip(child1[i], self.params.SMin, self.params.SMax)
+            child2[i] = np.clip(child2[i], self.params.SMin, self.params.SMax)
+        return child1, child2
 
-    def mutate (self , individual):
-        for i in range (len (individual)):
-            # print (m_rate)
-            if self.rs.uniform (0 , 1) <= m_rate:
-                individual[i] += self.rs.uniform (-1 , 1) * (self.params.SMax - self.params.SMin) * 0.1
-                individual[i] = np.clip (individual[i] , self.params.SMin , self.params.SMax)
+    def mutate(self, individual):
+        for i in range(len(individual)):
+            if self.rs.uniform(0, 1) <= m_rate:
+                individual[i] += self.rs.uniform(-1, 1) * (self.params.SMax - self.params.SMin) * 0.1
+                individual[i] = np.clip(individual[i], self.params.SMin, self.params.SMax)
         return individual
 
-    def evolve_c_2n_n (self , pop):
-        fitness = evaluate_population(pop , self.benchmark)
-        parents = self.tournament_selection (self.pop_size , pop , fitness)
+    def evolve_c_2n_n(self, pop):
+        global fitness
+
+        parents = self.tournament_selection(self.pop_size, pop, fitness)
         offspring = []
-        for i in range (0, len(pop), 2):
-            # parent1 , parent2 = pop[i] , pop[i + 1]
-            # parent1 = pop[i]
-            # parent2 = pop[min(i + 1, len(pop) - 1)]
-            parent1 , parent2 = parents[i] , parents[min (i + 1 , len (parents) - 1)]
-            child1 , child2 = self.simulated_binary_crossover (parent1 , parent2)
-            offspring.append (self.mutate(child1))
-            offspring.append (self.mutate(child2))
+        
+        for i in range(0, len(pop), 2):
+            parent1, parent2 = parents[i], parents[min(i + 1, len(parents) - 1)]
+            child1, child2 = self.simulated_binary_crossover(parent1, parent2)
+            offspring.append(self.mutate(child1))
+            offspring.append(self.mutate(child2))
+
+        offspring_fitness = evaluate_population(offspring, self.benchmark)
 
         combined_population = parents + offspring
-        combined_fitness = evaluate_population (combined_population , self.benchmark)
-        sorted_indices = np.argsort (combined_fitness)
-        new_population = [combined_population[i] for i in sorted_indices[:self.pop_size]]
-        best_fitness = combined_fitness[sorted_indices[0]]
+        combined_fitness = fitness + offspring_fitness
 
-        return new_population , best_fitness
+        sorted_indices = np.argsort(combined_fitness)
+        new_population = [combined_population[i] for i in sorted_indices[:self.pop_size]]
+        fitness = [combined_fitness[i] for i in sorted_indices[:self.pop_size]]  # Update global fitness
+        
+        best_fitness = fitness[0]
+
+        return new_population, best_fitness
