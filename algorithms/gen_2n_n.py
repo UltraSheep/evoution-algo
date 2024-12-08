@@ -1,7 +1,6 @@
 import numpy as np
-import config
-from fastapi import FastAPI
-from pydantic import BaseModel
+from .. import config
+from ..utils.structures import INDIVIDUAL, POPULATION, RESULT
 from typing import List
 
 c_rate = 0.80
@@ -10,20 +9,7 @@ m_rate = 0.20
 pre_fitness = None  # Declare fitness as a global variable
 init_pop_fitness = None
 
-class INDIVIDUAL(BaseModel):
-    id: int
-    health: int
-    weapon: int
-    speed: int
-    jump: int
-
-class POPULATION(BaseModel):
-    pop: List[INDIVIDUAL]
-
-class RESULT(BaseModel):
-    fitness: List[int]
-
-class Algorithm:    
+class algorithm:    
     def __init__(self):
         self.name = "gen_2n_n algorithm"
         self.pop_size = config.POP_SIZE
@@ -111,7 +97,7 @@ class Algorithm:
 
         return new_population , pre_fitness[0]
 
-algo = Algorithm()
+algo = algorithm()
 
 def train (population_data , fitness_data):
     population = [[ind.health , ind.weapon , ind.speed , ind.jump] for ind in population_data]

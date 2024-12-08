@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .config import algorithm
+from .algorithms.gen_2n_n import algorithm
 from .utils.initialize_environment import initialize_environment
 from .utils.initialize_population import initialize_population
 from .utils.structures import POPULATION, RESULT
