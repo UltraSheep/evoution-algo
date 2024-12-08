@@ -1,18 +1,8 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-
-class INDIVIDUAL(BaseModel):
-    id:int
-    health:int
-    weapon:int
-    speed:int
-    jump:int
-
-class POPULATION(BaseModel):
-    pop: list[INDIVIDUAL]
-
-class RESULT(BaseModel):
-    fitness:list[int]
+from .config import algorithm
+from .utils.initialize_environment import initialize_environment
+from .utils.initialize_population import initialize_population
+from .utils.structures import POPULATION, RESULT
 
 current_population = POPULATION()
 initialize_environment()
@@ -31,5 +21,5 @@ async def initialize():
 
 @app.put("/next_generation")
 async def next_generation(result:RESULT):
-    current_population.pop = train(current_population.pop, result.fitness)
+    current_population.pop = algorithm.train(current_population.pop, result.fitness)
     return {"population": current_population.pop}
