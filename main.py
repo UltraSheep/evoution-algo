@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .algorithms.gen_2n_n import algorithm
+from .algorithms.gen_2n_n import train
 from .utils.initialize_environment import initialize_environment
 from .utils.initialize_population import initialize_population
 from .utils.structures import POPULATION, RESULT
@@ -26,5 +26,5 @@ async def initialize():
 
 @app.put("/next_generation")
 async def next_generation(result:RESULT):
-    current_population.pop = algorithm.train(current_population.pop, result.fitness)
+    current_population.pop = train(current_population.pop, result.fitness)
     return {"population": current_population.pop}
