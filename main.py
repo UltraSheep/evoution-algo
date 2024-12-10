@@ -14,9 +14,9 @@ async def root():
     return {"message": "Hello World"}
 
 @app.put("/console-log")
-async def consolelog(input):
-    print(input)
-    return {"message": input}
+async def consolelog(result:RESULT):
+    print(result)
+    return {"message": "success"}
 
 @app.get("/initialize")
 async def initialize():
