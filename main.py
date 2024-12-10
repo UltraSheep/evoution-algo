@@ -13,6 +13,11 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
+@app.put("/console-log")
+async def consolelog(input):
+    print(input)
+    return {"message": input}
+
 @app.get("/initialize")
 async def initialize():
     current_population = POPULATION()
