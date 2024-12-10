@@ -13,7 +13,7 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
-@app.post("/initialize")
+@app.get("/initialize")
 async def initialize():
     current_population = POPULATION()
     current_population.pop = initialize_population()
