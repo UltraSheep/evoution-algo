@@ -100,7 +100,12 @@ class algorithm:
 algo = algorithm()
 
 def train (population_data , fitness_data):
+    
     population = [[ind.health , ind.weapon , ind.speed , ind.jump] for ind in population_data]
+
+    print("in train population:")
+    print(population)
+    print("--------------------------")
     new_population_data , _ = algo.evolve_c_2n_n (population , fitness_data)
 
     new_population = []

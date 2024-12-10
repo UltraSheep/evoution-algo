@@ -20,7 +20,6 @@ async def consolelog(result:RESULT):
 
 @app.get("/initialize")
 async def initialize():
-    current_population = POPULATION()
     current_population.pop = initialize_population()
     return {"population": current_population.pop}
 
