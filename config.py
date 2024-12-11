@@ -2,10 +2,10 @@ from .utils.benchmark_functions import Sphere as benchmark  # change import to a
 BENCHMARK = benchmark
 DIM = 30
 GENERATIONS = 100
-POP_SIZE = 50
+POP_SIZE = 5
 RUNS = 20
 SEED = 123
-TOURNAMENT_SIZE = 10
+TOURNAMENT_SIZE = 2
 RESULTS_FILE = "test"
 PLOT = False
 

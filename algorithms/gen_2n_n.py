@@ -69,7 +69,7 @@ class algorithm:
         offspring = []
         for i in range (0 , len(parents) , 2):
             parent1 , parent2 = parents[i] , parents[min(i + 1 , len(parents) - 1)]
-            child1 , child2 = self.simulated_binary_crossover (parent1 , parent2)
+            child1  , child2  = self.simulated_binary_crossover (parent1 , parent2)
             offspring.append (self.mutate(child1))
             if len(offspring) < self.pop_size:
                 offspring.append (self.mutate(child2))
@@ -102,9 +102,9 @@ class algorithm:
 
         # Debug output
         print ("combined_fitness: " , combined_fitness)
-        print ("sorted_indices: " , sorted_indices)
-        print ("new_population: " , new_population)
-        print ("pre_fitness: " , pre_fitness)
+        print ("sorted_indices: "   , sorted_indices)
+        print ("new_population: "   , new_population)
+        print ("pre_fitness: "      , pre_fitness)
 
         return new_population , pre_fitness[0]
 
@@ -118,13 +118,14 @@ def train (population_data , fitness_data):
                     int ((ind.speed - 50) / 0.5) ,
                     int ((ind.jump - 100) / 3)
                    ] for ind in population_data]
-    adjusted_fitness = [100 - fitness for fitness in fitness_data]
+
+    # adjusted_fitness = [100 - fitness for fitness in fitness_data]
 
     # Debug output
     # print ("in train population:" + population)
     # print ("in train fitness_data:" + fitness_data + "/ adjusted_fitness:" + adjusted_fitness)
 
-    new_population_data , _ = algo.evolve_c_2n_n (population , adjusted_fitness)
+    new_population_data , _ = algo.evolve_c_2n_n (population , fitness_data)
 
     new_population = []
     for i , data in enumerate (new_population_data):
