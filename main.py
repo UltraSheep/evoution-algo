@@ -14,16 +14,16 @@ async def root():
     return {"message": "Hello World"}
 
 @app.put("/console-log")
-async def consolelog(result:RESULT):
+async def consolelog (result : RESULT):
     print(result)
-    return {"message": "success"}
+    return {"message" : "success"}
 
 @app.get("/initialize")
 async def initialize():
     current_population.pop = initialize_population()
-    return {"population": current_population.pop}
+    return {"population" : current_population.pop}
 
 @app.put("/next_generation")
-async def next_generation(result:RESULT):
-    current_population.pop = train(current_population.pop, result.fitness)
-    return {"population": current_population.pop}
+async def next_generation(result : RESULT):
+    current_population.pop = train(current_population.pop , result.fitness)
+    return {"population" : current_population.pop}
