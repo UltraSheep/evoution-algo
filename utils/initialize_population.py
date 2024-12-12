@@ -1,12 +1,17 @@
 from .. import config
-from .structures import INDIVIDUAL 
+from .structures import INDIVIDUAL, LEVEL, POPULATION
 import numpy.random as np
 
 
 def initialize_population ():
-    population = []
+    levels = []
+    population = POPULATION()
     for i in range (config.POP_SIZE):
-        individual = INDIVIDUAL(id = i , health = np.randint(1 , 40) , weapon = np.randint(1 , 3) , speed = np.randint(50 , 100) , jump = np.randint(100 , 400))
-        population.append (individual)
-
+        individuals = []
+        for i in range (config.ENEMY_COUNT):
+            individual = INDIVIDUAL(id = i)
+            individual.initialize()
+            individuals.append (individual)
+        levels.append(LEVEL(enemies = individuals))
+    population.pop = levels
     return population

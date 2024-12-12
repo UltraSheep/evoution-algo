@@ -20,10 +20,14 @@ async def consolelog (result : RESULT):
 
 @app.get("/initialize")
 async def initialize():
-    current_population.pop = initialize_population()
-    return {"population" : current_population.pop}
+    current_population = initialize_population()
+    denormalized_population = current_population
+    denormalized_population.denormalize()
+    return {"population" : denormalized_population.pop}
 
 @app.put("/next_generation")
 async def next_generation(result : RESULT):
     current_population.pop = train(current_population.pop , result.fitness)
-    return {"population" : current_population.pop}
+    denormalized_population = current_population
+    denormalized_population.denormalize()
+    return {"population" : denormalized_population.pop}

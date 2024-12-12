@@ -8,6 +8,7 @@ SEED = 123
 TOURNAMENT_SIZE = 2
 RESULTS_FILE = "test"
 PLOT = False
+ENEMY_COUNT=5
 
 # available benchmark functions:
 # Sphere
