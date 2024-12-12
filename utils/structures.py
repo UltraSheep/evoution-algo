@@ -14,7 +14,7 @@ class INDIVIDUAL(BaseModel):
         self.speed  = np.randint(100)
         self.jump   = np.randint(100)
 
-    def denormalize(self):
+    def _denormalize(self):
         self.health = int (self.health * 0.4 + 1)
         self.weapon = int (self.weapon * 0.03)
         self.speed  = int (self.speed * 0.5 + 50)
@@ -23,9 +23,9 @@ class INDIVIDUAL(BaseModel):
 class LEVEL(BaseModel):
     enemies: list[INDIVIDUAL] = None
 
-    def denormalize(self):
+    def _denormalize(self):
         for individual in self.enemies:
-            individual.denormalize()
+            individual._denormalize()
 
 class POPULATION(BaseModel):
     pop: list[LEVEL] = None
@@ -42,7 +42,7 @@ class POPULATION(BaseModel):
     
     def denormalize(self):
         for level in self.pop:
-            level.denormalize()
+            level._denormalize()
 
 class RESULT(BaseModel):
     fitness:list[int]
