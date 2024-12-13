@@ -2,11 +2,11 @@ from pydantic import BaseModel
 import numpy.random as np
 
 class INDIVIDUAL(BaseModel):
-    id:int     = None
-    health:int = None
-    weapon:int = None
-    speed:int  = None
-    jump:int   = None
+    id:     int = None
+    health: int = None
+    weapon: int = None
+    speed:  int = None
+    jump:   int = None
 
     def initialize(self):
         self.health = np.randint(100)
@@ -31,18 +31,20 @@ class POPULATION(BaseModel):
     pop: list[LEVEL] = None
 
     def flatten(self):
-        flattened = []
+        result = []
         for level in self.pop:
+            flattened = []
             for enemy in level.enemies:
                 flattened.append(enemy.health)
                 flattened.append(enemy.weapon)
                 flattened.append(enemy.speed)
                 flattened.append(enemy.jump)
-        return flattened
+            result.append(flattened)
+        return result
     
     def denormalize(self):
         for level in self.pop:
             level._denormalize()
 
 class RESULT(BaseModel):
-    fitness:list[int]
+    fitness: list[int]

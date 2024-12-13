@@ -3,11 +3,11 @@ from fastapi import FastAPI
 from .algorithms.gen_2n_n import train
 from .utils.initialize_environment import initialize_environment
 from .utils.initialize_population import initialize_population
-from .utils.structures import POPULATION, RESULT
+from .utils.log_results import log
+from .utils.structures import RESULT
 
-current_population = POPULATION()
-initialize_environment()
-
+current_population = None
+generation = None
 app = FastAPI()
 
 @app.get("/")
@@ -21,6 +21,9 @@ async def consolelog (result : RESULT):
 
 @app.get("/initialize")
 async def initialize():
+    initialize_environment()
+    global current_population, generation
+    generation = 0
     current_population = initialize_population()
     denormalized_population = copy.deepcopy(current_population)
     denormalized_population.denormalize()
@@ -28,7 +31,10 @@ async def initialize():
 
 @app.put("/next_generation")
 async def next_generation(result : RESULT):
-    current_population.pop = train(current_population.pop , result.fitness)
+    global current_population, generation
+    log(generation, current_population, result)
+    generation += 1
+    current_population.pop = train(current_population , result)
     denormalized_population = copy.deepcopy(current_population)
     denormalized_population.denormalize()
     return {"population" : denormalized_population.pop}
