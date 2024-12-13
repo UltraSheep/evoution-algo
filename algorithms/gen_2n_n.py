@@ -114,18 +114,24 @@ def train (population_data , fitness_data):
     population = population_data.flatten()
     
     # Debug output
-    print ("in train population:" + population)
+    # print ("in train population:" + population)
 
     new_population_data , _ = algo.evolve_c_2n_n (population , fitness_data)
 
     new_population = []
-    each_new_population_data = []
-    
+        
     for i in range (algo.pop_size):
         each_new_population_data = []
         for j in range (config.ENEMY_COUNT):
-            for k in range (config.ENEMY_PARAMS):
-                
+            base_index = i * config.DIM + j * config.ENEMY_PARAMS
+            one_enemy = [INDIVIDUAL (id = j,
+                                     health = new_population_data[base_index + 0],
+                                     weapon = new_population_data[base_index + 1],
+                                     speed  = new_population_data[base_index + 2],
+                                     jump   = new_population_data[base_index + 3])]
+            each_new_population_data.append(one_enemy)
+        new_population.append(each_new_population_data)
+
 
 
     # for i , data in enumerate (each_new_population_data):
