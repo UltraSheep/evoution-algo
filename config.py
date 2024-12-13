@@ -1,14 +1,19 @@
 from .utils.benchmark_functions import Sphere as benchmark  # change import to any function listed below
 BENCHMARK = benchmark
-DIM = 30
+
 GENERATIONS = 100
-POP_SIZE = 5
 RUNS = 20
-SEED = 123
+
+POP_SIZE = 5
 TOURNAMENT_SIZE = 2
+
+ENEMY_COUNT = 5
+ENEMY_PARAMS = 4
+DIM = ENEMY_COUNT * ENEMY_PARAMS
+
+SEED = 123
 RESULTS_FILE = "test"
 PLOT = False
-ENEMY_COUNT = 5
 
 # available benchmark functions:
 # Sphere

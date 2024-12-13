@@ -1,6 +1,6 @@
 import numpy as np
 from .. import config
-from ..utils.structures import INDIVIDUAL, POPULATION, RESULT
+from ..utils.structures import INDIVIDUAL, POPULATION, RESULT 
 from typing import List
 
 c_rate = 0.80
@@ -111,7 +111,6 @@ class algorithm:
 algo = algorithm()
 
 def train (population_data , fitness_data):
-    
     population = population_data.flatten()
     
     # Debug output
@@ -120,12 +119,22 @@ def train (population_data , fitness_data):
     new_population_data , _ = algo.evolve_c_2n_n (population , fitness_data)
 
     new_population = []
-    for i , data in enumerate (new_population_data):
-        new_population.append (INDIVIDUAL ( id = i ,
-                                            health = data[0] ,
-                                            weapon = data[1] ,
-                                            speed  = data[2] ,
-                                            jump   = data[3]))
+    each_new_population_data = []
+    
+    for i in range (algo.pop_size):
+        each_new_population_data = []
+        for j in range (config.ENEMY_COUNT):
+            for k in range (config.ENEMY_PARAMS):
+                
+
+
+    # for i , data in enumerate (each_new_population_data):
+    #     new_population.append (INDIVIDUAL ( id = i ,
+    #                                         health = data[0] ,
+    #                                         weapon = data[1] ,
+    #                                         speed  = data[2] ,
+    #                                         jump   = data[3]))
+    
     # Debug output
     # print("in train new_population:")
     # print(new_population)
