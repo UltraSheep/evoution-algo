@@ -112,29 +112,20 @@ algo = algorithm()
 
 def train (population_data , fitness_data):
     
-
-    population = [ [int (ind.health / 0.4) ,
-                    int (ind.weapon / 0.03) ,
-                    int ((ind.speed - 50) / 0.5) ,
-                    int ((ind.jump - 100) / 3)
-                   ] for ind in population_data]
-
-    # adjusted_fitness = [100 - fitness for fitness in fitness_data]
-
+    population = population_data.flatten()
+    
     # Debug output
-    # print ("in train population:" + population)
-    # print ("in train fitness_data:" + fitness_data + "/ adjusted_fitness:" + adjusted_fitness)
+    print ("in train population:" + population)
 
     new_population_data , _ = algo.evolve_c_2n_n (population , fitness_data)
 
     new_population = []
     for i , data in enumerate (new_population_data):
-        new_population.append (INDIVIDUAL ( id = i,
-                                            health = int (data[0] * 0.4 + 1) ,
-                                            weapon = int (data[1] * 0.03) ,
-                                            speed  = int (data[2] * 0.5 + 50) ,
-                                            jump   = int (data[3] * 3 + 100)))
-    
+        new_population.append (INDIVIDUAL ( id = i ,
+                                            health = data[0] ,
+                                            weapon = data[1] ,
+                                            speed  = data[2] ,
+                                            jump   = data[3]))
     # Debug output
     # print("in train new_population:")
     # print(new_population)
