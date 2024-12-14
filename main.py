@@ -1,23 +1,13 @@
 import copy
+
 from fastapi import FastAPI
-from .algorithms.gen_2n_n import train
-from .utils.initialize_environment import initialize_environment
-from .utils.initialize_population import initialize_population
-from .utils.log_results import log
-from .utils.structures import RESULT
+
+from .utils import *
+from .config import train
 
 current_population = None
 generation = None
 app = FastAPI()
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-@app.put("/console-log")
-async def consolelog (result : RESULT):
-    print(result)
-    return {"message" : "success"}
 
 @app.get("/initialize")
 async def initialize():
