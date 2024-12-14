@@ -134,7 +134,7 @@ def transform_population (population):
     
     return POPULATION (pop = new_population)
 
-def train (population_data , fitness_data):
+def train (population_data: POPULATION , fitness_data: RESULT):
     # all to array
     population = population_data.flatten()
     fitness = fitness_data.fitness
