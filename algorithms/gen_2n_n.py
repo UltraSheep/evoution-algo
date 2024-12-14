@@ -1,7 +1,9 @@
 import numpy as np
+import json
 from .. import config
-from ..utils.structures import INDIVIDUAL, POPULATION, RESULT 
+from ..utils.structures import INDIVIDUAL , POPULATION , RESULT , LEVEL
 from typing import List
+
 
 c_rate = 0.80
 m_rate = 0.20
@@ -85,7 +87,7 @@ class algorithm:
             combined_population , offspring = self.evolve (pop , pop)
             pre_fitness = curr_fitness
             # Debug output
-            # print("Initial pre_fitness:" , pre_fitness)
+            # print("in evolve_c_2n_n pre_fitness" , pre_fitness)
             return offspring , pre_fitness[0]
 
         parents = self.tournament_selection (pop , pre_fitness)
@@ -101,47 +103,67 @@ class algorithm:
         pre_fitness = [combined_fitness[i] for i in sorted_indices[:self.pop_size]]
 
         # Debug output
-        print ("combined_fitness: " , combined_fitness)
-        print ("sorted_indices: "   , sorted_indices)
-        print ("new_population: "   , new_population)
-        print ("pre_fitness: "      , pre_fitness)
+        # print ("combined_fitness: " , combined_fitness)
+        # print ("sorted_indices: "   , sorted_indices)
+        # print ("new_population: "   , new_population)
+        # print ("pre_fitness: "      , pre_fitness)
 
         return new_population , pre_fitness[0]
 
 algo = algorithm()
 
-def train (population_data , fitness_data):
-    population = population_data.flatten()
-    
-    # Debug output
-    # print ("in train population:" + population)
-
-    new_population_data , _ = algo.evolve_c_2n_n (population , fitness_data)
-
+def transform_population (population):
     new_population = []
-        
-    for i in range (algo.pop_size):
+    for i in range (config.POP_SIZE):
         each_new_population_data = []
         for j in range (config.ENEMY_COUNT):
-            base_index = i * config.DIM + j * config.ENEMY_PARAMS
-            one_enemy = [INDIVIDUAL (id = j,
-                                     health = new_population_data[base_index + 0],
-                                     weapon = new_population_data[base_index + 1],
-                                     speed  = new_population_data[base_index + 2],
-                                     jump   = new_population_data[base_index + 3])]
+            base_index = j * config.ENEMY_PARAMS
+            one_enemy = INDIVIDUAL (
+                id = j,
+                health = int (population [i][base_index + 0]),
+                weapon = int (population [i][base_index + 1]),
+                speed  = int (population [i][base_index + 2]),
+                jump   = int (population [i][base_index + 3])
+            )
             each_new_population_data.append(one_enemy)
-        new_population.append(each_new_population_data)
+        new_population.append(LEVEL(enemies = each_new_population_data))
 
+    # Debug output
+    # for level in new_population:
+    #     if isinstance (level , tuple):
+    #         print (f"unexpected tuple found: {level}")
+    #         raise TypeError ("Level instance expected, but for tuple")
+    
+    return POPULATION (pop = new_population)
 
+def train (population_data , fitness_data):
+    # all to array
+    population = population_data.flatten()
+    fitness = fitness_data.fitness
 
-    # for i , data in enumerate (each_new_population_data):
-    #     new_population.append (INDIVIDUAL ( id = i ,
-    #                                         health = data[0] ,
-    #                                         weapon = data[1] ,
-    #                                         speed  = data[2] ,
-    #                                         jump   = data[3]))
+    # Debug output
+    # print ("fitness_data: ", fitness)
+    # print ("in train population:")
+    # for i in range (config.POP_SIZE):
+    #     print (f"population[{i}]: {population[i]}")
+    
+    new_population_data , _ = algo.evolve_c_2n_n (population , fitness)
     
     # Debug output
-    # print("in train new_population:")
-    # print(new_population)
-    return new_population
+    # print ("new_population_data: ", new_population_data)
+    # for i , data in enumerate(new_population_data):
+    #     print (f"new_population_data[{i}]: {data} , type: {type(data)}")
+    
+    # for i in range (len (new_population_data)):
+    #     if isinstance (new_population_data[i] , tuple):
+    #         print (f"unexpected tuple found at index: {i}")
+    #         new_population_data[i] = list(new_population_data[i])
+
+    update_population = transform_population (new_population_data)
+    
+    # Debug output
+    # print ("type of update_population: ", type(update_population))
+    # for level in update_population.pop:
+    #     print (f"type of level in update_population: {type(level)}")
+
+    return update_population
