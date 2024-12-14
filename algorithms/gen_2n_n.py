@@ -1,7 +1,6 @@
 import numpy as np
 from .. import config
-from ..utils.structures import INDIVIDUAL, POPULATION, RESULT 
-from typing import List
+from ..utils.structures import *
 
 c_rate = 0.80
 m_rate = 0.20
@@ -109,13 +108,13 @@ class algorithm:
 
 algo = algorithm()
 
-def train (population_data , fitness_data):
+def train (population_data: POPULATION , fitness_data: RESULT):
     population = population_data.flatten()
-    
+    fitness = fitness_data.fitness
     # Debug output
     # print ("in train population:" + population)
 
-    new_population_data , _ = algo.evolve_c_2n_n (population , fitness_data)
+    new_population_data , _ = algo.evolve_c_2n_n (population , fitness)
 
     new_population = []
         

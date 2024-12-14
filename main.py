@@ -24,7 +24,7 @@ async def next_generation(result : RESULT):
     global current_population, generation
     log(generation, current_population, result)
     generation += 1
-    current_population.pop = train(current_population , result.fitness)
+    current_population.pop = train(current_population , result)
     denormalized_population = copy.deepcopy(current_population)
     denormalized_population.denormalize()
     return {"population" : denormalized_population.pop}
