@@ -1,6 +1,7 @@
 import os
+from .structures import *
 
-def log(generation, population, result):
+def log(generation, population: POPULATION, result: RESULT):
     with open(os.environ['result_file'], "a") as file:
         file.write(f"Gen {generation} :\n")
         for i, level in enumerate(population.pop):

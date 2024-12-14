@@ -1,4 +1,4 @@
-from .structures import INDIVIDUAL, LEVEL, POPULATION
+from .structures import *
 from .. import config
 
 def initialize_population ():

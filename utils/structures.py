@@ -1,9 +1,9 @@
 from pydantic import BaseModel
-import numpy.random as np
+import numpy.random as random
 from .. import config
 
 def rng():
-    return np.randint(config.SMIN, config.SMAX)
+    return random.randint(config.SMIN, config.SMAX)
 
 class INDIVIDUAL(BaseModel):
     id:     int = None
