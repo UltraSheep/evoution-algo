@@ -9,15 +9,6 @@ current_population = None
 generation = None
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-@app.put("/console-log")
-async def consolelog (result : RESULT):
-    print(result)
-    return {"message" : "success"}
-
 @app.get("/initialize")
 async def initialize():
     initialize_environment()
