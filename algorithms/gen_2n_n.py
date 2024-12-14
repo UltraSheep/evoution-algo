@@ -131,7 +131,6 @@ def train (population_data: POPULATION , fitness_data: RESULT):
         new_population.append(each_new_population_data)
 
 
-
     # for i , data in enumerate (each_new_population_data):
     #     new_population.append (INDIVIDUAL ( id = i ,
     #                                         health = data[0] ,
