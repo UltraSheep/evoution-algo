@@ -1,7 +1,5 @@
-from .. import config
 from .structures import INDIVIDUAL, LEVEL, POPULATION
-import numpy.random as np
-
+from .. import config
 
 def initialize_population ():
     levels = []

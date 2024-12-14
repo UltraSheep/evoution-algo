@@ -1,10 +1,9 @@
 import copy
+
 from fastapi import FastAPI
+
+from .utils import *
 from .config import train
-from .utils.initialize_environment import initialize_environment
-from .utils.initialize_population import initialize_population
-from .utils.log_results import log
-from .utils.structures import RESULT
 
 current_population = None
 generation = None
