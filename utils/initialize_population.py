@@ -1,7 +1,5 @@
+from .structures import *
 from .. import config
-from .structures import INDIVIDUAL, LEVEL, POPULATION
-import numpy.random as np
-
 
 def initialize_population ():
     levels = []

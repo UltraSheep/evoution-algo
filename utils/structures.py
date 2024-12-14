@@ -1,5 +1,9 @@
 from pydantic import BaseModel
-import numpy.random as np
+import numpy.random as random
+from .. import config
+
+def rng():
+    return random.randint(config.SMIN, config.SMAX)
 
 class INDIVIDUAL(BaseModel):
     id:     int = None
@@ -9,10 +13,10 @@ class INDIVIDUAL(BaseModel):
     jump:   int = None
 
     def initialize(self):
-        self.health = np.randint(100)
-        self.weapon = np.randint(100)
-        self.speed  = np.randint(100)
-        self.jump   = np.randint(100)
+        self.health = rng()
+        self.weapon = rng()
+        self.speed  = rng()
+        self.jump   = rng()
 
     def _denormalize(self):
         self.health = int (self.health * 0.4 + 1)

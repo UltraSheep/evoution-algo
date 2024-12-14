@@ -1,8 +1,7 @@
 import numpy as np
 import json
 from .. import config
-from ..utils.structures import INDIVIDUAL , POPULATION , RESULT , LEVEL
-from typing import List
+from ..utils.structures import *
 
 
 c_rate = 0.80
@@ -14,10 +13,9 @@ class algorithm:
     def __init__(self):
         self.name = "gen_2n_n algorithm"
         self.pop_size = config.POP_SIZE
-        self.generations = config.GENERATIONS
-        self.benchmark = config.BENCHMARK.function
         self.tournament_size = config.TOURNAMENT_SIZE
-        self.params = config.BENCHMARK
+        self.SMax = config.SMAX
+        self.SMin = config.SMIN
         self.rs = np.random.RandomState(config.SEED)
 
     def strip_element_sigma (self , element):
@@ -55,16 +53,16 @@ class algorithm:
                 child1[i] = 0.5 * ((1 + beta) * parent1[i] + (1 - beta) * parent2[i])
                 child2[i] = 0.5 * ((1 - beta) * parent1[i] + (1 + beta) * parent2[i])
         
-            child1[i] = np.clip(child1[i] , self.params.SMin, self.params.SMax)
-            child2[i] = np.clip(child2[i] , self.params.SMin, self.params.SMax)
+            child1[i] = np.clip(child1[i] , self.SMin, self.SMax)
+            child2[i] = np.clip(child2[i] , self.SMin, self.SMax)
 
         return child1 , child2
 
     def mutate (self , individual):
         for i in range (len(individual)):
             if self.rs.uniform (0 , 1) <=m_rate:
-                individual[i] += self.rs.uniform (-1 , 1) * (self.params.SMax - self.params.SMin) * 0.1
-                individual[i] = np.clip (individual[i] , self.params.SMin , self.params.SMax)
+                individual[i] += self.rs.uniform (-1 , 1) * (self.SMax - self.SMin) * 0.1
+                individual[i] = np.clip (individual[i] , self.SMin , self.SMax)
         return individual
 
     def evolve(self , pop , parents):
