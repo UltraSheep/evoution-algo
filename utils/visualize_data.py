@@ -1,5 +1,8 @@
 import os
 import json
+import datetime
+
+from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -7,16 +10,20 @@ from .structures import *
 
 def visualize_data(manual_file: LOG = None):
     if manual_file:
+        file_path = f"./results/manual_{datetime.datetime.now().strftime('%Y_%m_%d_%H%M%S')}"
+        result_file = f'{file_path}/result.json'
+
+        Path(file_path).mkdir(exist_ok=True)
+        with open(result_file, "w") as file:
+            file.write(manual_file.model_dump_json(indent=4))
+
         data = manual_file.model_dump()
-        result_file = "./results/manual"
     else:
-        result_file = os.environ.get("result_file")
-        if not result_file or not os.path.exists(result_file):
-            raise FileNotFoundError("Result file not found. Make sure logging has been performed.")
+        file_path = os.environ.get("result_path")
+        result_file = f'{file_path}/result.json'
 
         with open(result_file, "r") as file:
             data = json.load(file)
-        result_file = result_file[:-5]
 
     generations = []
     for generation in data["generations"]:
@@ -36,7 +43,7 @@ def visualize_data(manual_file: LOG = None):
     files = []
     
     # Visualization 1: Average Score per Generation
-    image_path = f'{result_file}_fig1.png'
+    image_name = f'{file_path}/average_score.png'
     avg_scores = df.groupby("generation_id")["score"].mean()
     plt.figure(figsize=(10, 6))
     plt.plot(avg_scores.index, avg_scores.values, marker="o", label="Average Score")
@@ -45,11 +52,11 @@ def visualize_data(manual_file: LOG = None):
     plt.ylabel("Average Score")
     plt.grid(True)
     plt.legend()
-    plt.savefig(image_path)
-    files.append(image_path)
+    plt.savefig(image_name)
+    files.append(image_name)
 
     # Visualization 2: Average Attributes per Generation
-    image_path = f'{result_file}_fig2.png'
+    image_name = f'{file_path}/average_attributes.png'
     avg_attributes = df.groupby("generation_id")[["health", "weapon", "speed", "jump"]].mean()
     avg_attributes.plot(figsize=(10, 6), marker="o")
     plt.title("Average Enemy Attributes per Generation")
@@ -57,11 +64,11 @@ def visualize_data(manual_file: LOG = None):
     plt.ylabel("Attribute Value")
     plt.grid(True)
     plt.legend(title="Attributes")
-    plt.savefig(image_path)
-    files.append(image_path)
+    plt.savefig(image_name)
+    files.append(image_name)
 
     # Visualization 3: Distribution of Scores within a Specific Generation
-    image_path = f'{result_file}_fig2.png'
+    image_name = f'{file_path}/distribution.png'
     specific_gen = 0
     gen_data = df[df["generation_id"] == specific_gen]
     plt.figure(figsize=(10, 6))
@@ -70,7 +77,7 @@ def visualize_data(manual_file: LOG = None):
     plt.xlabel("Score")
     plt.ylabel("Frequency")
     plt.grid(True)
-    # plt.savefig(image_path)
-    # files.append(image_path)
+    # plt.savefig(image_name)
+    # files.append(image_name)
 
     return files

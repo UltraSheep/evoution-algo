@@ -3,7 +3,8 @@ import os
 from .structures import *
 
 def log(generation, population: POPULATION, result: RESULT):
-    result_file = os.environ.get("result_file")
+    result_path = os.environ.get("result_path")
+    result_file = f'{result_path}/result.json'
 
     with open(result_file, "r") as file:
         data = LOG.model_validate_json(file.read())
