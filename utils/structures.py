@@ -25,6 +25,7 @@ class INDIVIDUAL(BaseModel):
         self.jump   = int (self.jump * 3 + 100)
 
 class LEVEL(BaseModel):
+    score: int = None
     enemies: list[INDIVIDUAL] = None
 
     def _denormalize(self):
@@ -32,6 +33,7 @@ class LEVEL(BaseModel):
             individual._denormalize()
 
 class POPULATION(BaseModel):
+    id: int = None
     pop: list[LEVEL] = None
 
     def flatten(self):
@@ -52,3 +54,9 @@ class POPULATION(BaseModel):
 
 class RESULT(BaseModel):
     fitness: list[int]
+
+class LOG(BaseModel):
+    population_size: int
+    tournament_size: int
+    enemies_per_level: int
+    generations: list[POPULATION] = None
