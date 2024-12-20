@@ -3,11 +3,11 @@ BENCHMARK = benchmark
 DIM = 30
 GENERATIONS = 100
 POP_SIZE = 50
-RUNS = 1
+RUNS = 20
 SEED = 123
 TOURNAMENT_SIZE = 10
 RESULTS_FILE = "test"
-PLOT = False
+PLOT = True
 
 # available benchmark functions:
 # Sphere

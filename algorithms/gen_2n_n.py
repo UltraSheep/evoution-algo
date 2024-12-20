@@ -61,9 +61,9 @@ class algorithm:
         elite_fitness = [fitness[i] for i in sorted_indices[:elite_count]]
         return elite_individuals, elite_fitness[0]
 
-    def tournament_selection (self , n , pop , fitness):
+    def tournament_selection (self , pop , fitness):
         selected = []
-        for i in range (n):
+        for i in range (self.pop_size):
             # 2 pick 1
             # idx1 , idx2 = self.rs.choice (range(len(pop)), 2, replace = False)
             # if fitness[idx1] < fitness[idx2]:
@@ -127,16 +127,14 @@ class algorithm:
 
     def evolve_c_2n_n (self , pop):
         fitness = evaluate_population(pop , self.benchmark)
-        parents = self.tournament_selection (self.pop_size , pop , fitness)
+        parents = self.tournament_selection (pop , fitness)
         offspring = []
         for i in range (0, len(pop), 2):
-            # parent1 , parent2 = pop[i] , pop[i + 1]
-            # parent1 = pop[i]
-            # parent2 = pop[min(i + 1, len(pop) - 1)]
             parent1 , parent2 = parents[i] , parents[min (i + 1 , len (parents) - 1)]
             child1 , child2 = self.simulated_binary_crossover (parent1 , parent2)
             offspring.append (self.mutate(child1))
-            offspring.append (self.mutate(child2))
+            if (len(offspring) < self.pop_size):
+                offspring.append (self.mutate(child2))
 
         combined_population = pop + offspring
         combined_fitness = evaluate_population (combined_population , self.benchmark)
